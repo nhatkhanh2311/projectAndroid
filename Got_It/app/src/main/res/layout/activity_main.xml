@@ -10,6 +10,19 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="300dp"/>
+    <Button
+        android:id="@+id/camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Take photo"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Choose language to recognize:"
+        android:textSize="20sp"
+        android:layout_gravity="center"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,17 +30,17 @@
         android:layout_margin="10dp"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/result"
+            android:id="@+id/vie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Recognize"/>
+            android:text="Vietnamese"/>
         <Button
-            android:id="@+id/camera"
+            android:id="@+id/jpn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Camera"/>
+            android:text="Japanese"/>
     </LinearLayout>
     <TextView
         android:id="@+id/text"

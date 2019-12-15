@@ -18,9 +18,9 @@ import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
     private TextView textResult;
-    private TessBaseAPI mTess;
+    private TessBaseAPI mTess1, mTess2;
     private ImageView imgInput;
-    private Button btnRecognize;
+    private Button btnVie, btnJpn;
     private Button btnCamera;
     private Bitmap bitmap;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -30,12 +30,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        prepareTessDataCopy();
-        mTess = new TessBaseAPI();
-        mTess.init(getFilesDir() + "", "vie");
+        prepareTessDataCopy1();
+        prepareTessDataCopy2();
+        mTess1 = new TessBaseAPI();
+        mTess2 = new TessBaseAPI();
+        mTess1.init(getFilesDir() + "", "vie");
+        mTess2.init(getFilesDir() + "", "jpn");
         textResult = findViewById(R.id.text);
         imgInput = findViewById(R.id.image);
-        btnRecognize = findViewById(R.id.result);
+        btnVie = findViewById(R.id.vie);
+        btnJpn = findViewById(R.id.jpn);
         btnCamera = findViewById(R.id.camera);
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,16 +47,24 @@ public class MainActivity extends AppCompatActivity {
                 takePhoto();
             }
         });
-        btnRecognize.setOnClickListener(new View.OnClickListener() {
+        btnVie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTess.setImage(bitmap);
-                String result = mTess.getUTF8Text();
+                mTess1.setImage(bitmap);
+                String result = mTess1.getUTF8Text();
+                textResult.setText(result);
+            }
+        });
+        btnJpn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTess2.setImage(bitmap);
+                String result = mTess2.getUTF8Text();
                 textResult.setText(result);
             }
         });
     }
-    private void prepareTessDataCopy() {
+    private void prepareTessDataCopy1() {
         try {
             File dir = new File(getFilesDir() + "/tessdata");
             if (!dir.exists()) {
@@ -71,10 +83,28 @@ public class MainActivity extends AppCompatActivity {
                 in.close();
                 out.close();
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {e.printStackTrace();}
+    }
+    private void prepareTessDataCopy2() {
+        try {
+            File dir = new File(getFilesDir() + "/tessdata");
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+            File traineddata = new File(getFilesDir() + "/tessdata/jpn.traineddata");
+            if (!traineddata.exists()) {
+                AssetManager asset = getAssets();
+                InputStream in = asset.open("tessdata/jpn.traineddata");
+                OutputStream out = new FileOutputStream(getFilesDir() + "/tessdata/jpn.traineddata");
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, len);
+                }
+                in.close();
+                out.close();
+            }
+        } catch (Exception e) {e.printStackTrace();}
     }
     private void takePhoto() {
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
